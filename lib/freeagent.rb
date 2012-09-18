@@ -20,13 +20,21 @@ module FreeAgent
   require_relative 'freeagent/expense'
 
   class << self
+    VALID_KEYS = [:client_id, :client_secret, :access_token]
+    attr_accessor *VALID_KEYS
     attr_accessor :environment
     attr_accessor :debug
     attr_reader :client
     
-    def access_details(client_id, client_secret, access_token=nil)
-      @client = Client.new(client_id, client_secret)
-      @client.access_token = access_token if access_token
+    def options
+      Hash[ * VALID_KEYS.map { |key| [key, send(key)] }.flatten ]
+    end
+
+    def configure
+     yield self
+     @client = Client.new
+     @client.access_token = self.access_token
+     @client
     end
   end
 end

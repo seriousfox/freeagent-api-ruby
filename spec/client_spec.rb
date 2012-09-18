@@ -4,15 +4,15 @@ describe FreeAgent::Client do
 
   describe 'initialize' do
     #TODO
-    it 'should create a new client instance with client id and secret' do
-      @client = FreeAgent::Client.new('id', 'secret')
+    it 'should accept a block with the client_id and secret' do
+      FreeAgent.configure do |c|
+        c.client_id = 123
+        c.client_secret = 'secret'
+      end
+      FreeAgent.client_id.should eq(123)
+      FreeAgent.client_secret.should eq('secret')
     end
 
-    it 'should raise client error when no client id or secret specified' do
-      expect { FreeAgent::Client.new(nil, '') }.should raise_error(FreeAgent::ClientError)
-      expect { FreeAgent::Client.new('', nil) }.should raise_error(FreeAgent::ClientError)
-      expect { FreeAgent::Client.new(nil, nil) }.should raise_error(FreeAgent::ClientError)
-    end
   end
 
   describe 'client_options' do
@@ -103,9 +103,14 @@ describe FreeAgent::Client do
 
 
   describe '#fetch access_token' do
-    before :each do
-      @client = FreeAgent::Client.new('id', 'secret')
-    end
+   before :each do
+      FreeAgent.configure do |c|
+        c.client_id = 123
+        c.client_secret = 'secret'
+      end
+      
+      @client = FreeAgent.client
+    end 
 
     it 'should fetch access token' do
       #access_token = @client.fetch_access_token('auth_code', :redirect_uri => '')
@@ -120,7 +125,18 @@ describe FreeAgent::Client do
 
   describe '#access_token and #access_token=' do
     before :each do
-      @client = FreeAgent::Client.new('id', 'secret')
+      FreeAgent.configure do |c|
+        c.client_id = 123
+        c.client_secret = 'secret'
+      end
+      
+      @client = FreeAgent.client
+      # Reset the access token
+      @client.access_token = nil
+    end
+
+    it 'should have nil access token as it has not been set' do
+      # TODO
     end
 
     it 'should set and get the access token' do
@@ -128,9 +144,6 @@ describe FreeAgent::Client do
       @client.access_token.token.should eql 'token'
     end
 
-    it 'should have nil access token as it has not been set' do
-      @client.access_token.should be_nil
-    end
   end
 
   describe '#get' do

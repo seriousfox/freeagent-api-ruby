@@ -3,14 +3,11 @@ require 'multi_json'
 
 module FreeAgent
   class Client
-    def initialize(client_id, client_secret)
-      if client_id && client_secret
-        @client_id = client_id
-        @client_secret = client_secret
-        @client = OAuth2::Client.new(@client_id, @client_secret, Client.client_options)
-      else
-        raise FreeAgent::ClientError.new('Client id or client secret not set')
-      end
+    def initialize(options={})
+      options = FreeAgent.options.merge(options)
+      @client_id = options[:client_id]
+      @client_secret = options[:client_secret]
+      @client = OAuth2::Client.new(@client_id, @client_secret, Client.client_options)
     end
 
     def self.client_options
