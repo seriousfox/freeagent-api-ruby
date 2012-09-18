@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors = ['Murray Summers']
   s.email = 'murray@freeagent.com'
   s.homepage = "https://github.com/murraysum/freeagent-api-ruby"
-
+  s.add_runtime_dependency "rake"
   s.add_development_dependency "rspec"
   s.add_development_dependency "pry"
 
