@@ -118,8 +118,9 @@ describe FreeAgent::Client do
     end
 
     it 'should raise client error when redirect not specified' do
-      fetch_access_token = expect {@client.fetch_access_token('auth_code', {})}
-      fetch_access_token.should raise_error(FreeAgent::ClientError)
+      lambda { 
+        @client.fetch_access_token('auth_code', {}) 
+      }.should raise_error(FreeAgent::ClientError)
     end
   end
 
