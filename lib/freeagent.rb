@@ -19,6 +19,8 @@ module FreeAgent
   require_relative 'freeagent/estimate'
   require_relative 'freeagent/expense'
   require_relative 'freeagent/bank_transaction'
+  require_relative 'freeagent/bank_transaction_explanation'
+
   class << self
     VALID_KEYS = [:client_id, :client_secret, :access_token]
     attr_accessor *VALID_KEYS
