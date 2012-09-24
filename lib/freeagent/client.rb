@@ -77,6 +77,8 @@ module FreeAgent
       if @access_token
         options[:body] = MultiJson.encode(options[:data]) unless options[:data].nil?
         @access_token.send(method, path, options)
+        puts @access_token.inspect
+        puts links(@access_token)
       else
         raise FreeAgent::ClientError.new('Access Token not set')
       end
@@ -85,5 +87,14 @@ module FreeAgent
       puts api_error if FreeAgent.debug
       raise api_error
     end
+    
+    def links(response)
+      links = ( response.headers["Link"] || "" ).split(', ').map do |link|
+        url, type = link.match(/<(.*?)>; rel="(\w+)"/).captures
+        [ type, url ]
+      end
+      Hash[ *links.flatten ]
+    end
+    
   end
 end
